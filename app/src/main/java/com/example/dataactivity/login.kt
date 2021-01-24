@@ -12,6 +12,12 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat.startActivity
+import com.example.dataactivity.db.StudentDb
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Dispatchers.Main
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class login : AppCompatActivity(), View.OnClickListener {
     private lateinit var username : EditText
@@ -41,11 +47,13 @@ class login : AppCompatActivity(), View.OnClickListener {
                 inm.hideSoftInputFromWindow(currentFocus!!.windowToken, 0)
             }
             R.id.login -> {
-                if (username.text.toString() != ""){
-                    val intent = Intent(this, MainActivity::class.java)
-                    startActivity(intent)
-                }
-                else{ Toast.makeText(this, "Invalid Username or Password", Toast.LENGTH_SHORT).show()
+                CoroutineScope(Dispatchers.IO).launch {
+                    var user = StudentDb.getInstance(this@login).getUserDAO().authenticate(username.text.toString(), password.text.toString())
+                    if (user == null) {
+                        withContext(Main) { Toast.makeText(this@login, "Invalid Credentials", Toast.LENGTH_SHORT).show() }
+                    } else {
+                        startActivity(Intent(this@login, MainActivity::class.java))
+                    }
                 }
             }
             else -> {}

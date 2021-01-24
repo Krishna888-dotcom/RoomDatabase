@@ -6,6 +6,13 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Toast
+import com.example.dataactivity.db.StudentDb
+import com.example.dataactivity.entity.User
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class register : AppCompatActivity(), View.OnClickListener {
     private lateinit var fname : EditText
@@ -37,7 +44,31 @@ class register : AppCompatActivity(), View.OnClickListener {
     }
 
     override fun onClick(v: View?) {
-        val intent = Intent(this, login::class.java)
-        startActivity(intent)
+        val fname = fname.text.toString()
+        val lname = lname.text.toString()
+        val username = etusername.text.toString()
+        val password = etpassword.text.toString()
+        val confirmPassword = etcpassword.text.toString()
+
+        if (password != confirmPassword) {
+            etpassword.error = "Password does not match"
+            etpassword.requestFocus()
+            return
+        } else {
+            // code goes here
+            val user = User(fname, lname, username, password)
+            CoroutineScope(Dispatchers.IO).launch {
+                StudentDb
+                        .getInstance(this@register)
+                        .getUserDAO()
+                        .registerUser(user)
+                //Switch to main thread
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(this@register, "User Saved", Toast.LENGTH_SHORT)
+                            .show()
+                }
+            }
+
+        }
     }
 }
