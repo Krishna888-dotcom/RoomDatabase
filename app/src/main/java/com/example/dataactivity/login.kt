@@ -27,6 +27,7 @@ class login : AppCompatActivity(), View.OnClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
+
         binding()
         Loginbtn.setOnClickListener(this)
         loginConstraint.setOnClickListener(this)
@@ -40,7 +41,7 @@ class login : AppCompatActivity(), View.OnClickListener {
     }
 
     override fun onClick(v: View?) {
-        when(v?.getId()) {
+        when(v?.id) {
             R.id.loginConstraint -> {
                 val inm: InputMethodManager =
                     getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager

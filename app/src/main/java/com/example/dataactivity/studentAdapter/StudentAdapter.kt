@@ -1,6 +1,7 @@
 package com.example.dataactivity.studentAdapter
 
 import android.app.Dialog
+import android.content.Context
 import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
@@ -13,9 +14,11 @@ import com.example.dataactivity.db.StudentDb
 import com.example.dataactivity.entity.Student
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
-class StudentAdapter(val context: ArrayList<Student>, val lstStudent: ViewStudent) : RecyclerView.Adapter<StudentAdapter.StudentViewHolder>() {
+class StudentAdapter(val context: Context, val lstStudent:MutableList<Student>) : RecyclerView.Adapter<StudentAdapter.StudentViewHolder>() {
     class StudentViewHolder(v: View) : RecyclerView.ViewHolder(v) {
         var tvStdName : TextView
         var tvStdage : TextView
@@ -66,6 +69,13 @@ class StudentAdapter(val context: ArrayList<Student>, val lstStudent: ViewStuden
         btnYes.setOnClickListener {
             CoroutineScope(Dispatchers.IO).launch {
                 StudentDb.getInstance(context)!!.getStudentDAO().deleteStudent(studentData)
+
+                withContext(Main){
+                    lstStudent.removeAt(position)
+                    notifyDataSetChanged()
+                    dialog.dismiss()
+
+                }
             }
         }
         btnNo.setOnClickListener {

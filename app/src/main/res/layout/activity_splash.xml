@@ -12,7 +12,7 @@
         android:layout_height="match_parent"
         android:background="@drawable/hi"
         android:fontFamily="sans-serif-black"
-        android:text="                Kon Nichiwa"
+        android:text="                  Kon Nichiwa"
         android:textColor="#121111"
         android:textSize="30sp"
         android:textStyle="bold|italic"

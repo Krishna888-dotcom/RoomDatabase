@@ -7,10 +7,11 @@ import androidx.room.Room.databaseBuilder
 import androidx.room.RoomDatabase
 import com.example.dataactivity.dao.StudentDAO
 import com.example.dataactivity.dao.UserDAO
+import com.example.dataactivity.entity.Student
 import com.example.dataactivity.entity.User
 
 @Database(
-        entities = [(User::class)],
+        entities = [(User::class),(Student::class)],
         version = 1
 )
 abstract class StudentDb : RoomDatabase() {
@@ -36,7 +37,7 @@ abstract class StudentDb : RoomDatabase() {
                     context.applicationContext,
                     StudentDb::class.java,
                     "StudentDB"
-            ).build()
+            ).fallbackToDestructiveMigration().build()
         }
 
 

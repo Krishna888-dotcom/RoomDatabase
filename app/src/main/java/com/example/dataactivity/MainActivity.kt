@@ -30,7 +30,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 startActivity(intent)
             }
             R.id.Viewbutton -> {
-                Toast.makeText(this, "view student here", Toast.LENGTH_SHORT).show()
+                startActivity(Intent(this, ViewStudent::class.java))
             }
             else -> {}
         }
